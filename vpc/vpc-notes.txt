@@ -1,0 +1,141 @@
+Scenerio:
+---------
+
+- Your company's public-facing website is hosted in a local data center
+- The CTO, Soham, wants to migrate the website to AWS using EC2 (Elastic Compute Cloud)
+- You are asked to develop a basic, working proof of concept (POC) to demonstrate how the company could host the website on AWS EC2
+
+Virtual private Cloud (Basics):
+-------------------------------
+
+- A VPC is a servcie that let you launch AWS resources in a logically isolated virtual network you define
+- A VPC spans accorss entire region. Since each region can have multiple ASz so VPC can span accorss multiple AZs
+- A Subnet is a range of IP addresses  in your VPC. Every Subnet can be assoicated with *only ONE* AZ ( i:e.,You can launch AWS servcies into specific subnets)
+- A Route Table contians a set of rules, called rotues that are used to determine where network traffice from your VPC is directred.
+- An Internet Gateway enables your instace to connectc with internet.
+
+-------------
+SIMPLE SETUP
+-------------
+
+Step 1:
+-------
+
+- Craete VPC -- Name -- virtual-private-cloud 
+- IPv4 CIDR --> 10.0.0.9/16
+- Host address range --> 10.0.0.1 - 10.0.255.254 (255 broadcasting)
+
+Step 2:
+-------
+
+- Create subnet --> 10.0.1.0/24
+- Host address range --> 10.0.1.1 - 10.0.1.254 (255 broadcasting)
+
+Step 3:
+------
+
+- Create Internet Gateway and attached it with VPC.
+- Enable your Route table to connect with internet usinfg 0.0.0.0/0
+
+Step 4:
+-------
+
+- Launch an EC2 Machine with your specified VPC (virtual-private-cloud)
+- Try SSH
+
+---------------------------------
+SETUP WITH PUBLIC/PRIVATE SUBNETS
+---------------------------------
+
+Step 1:
+-------
+- Cretae VPC -- Name -- virtual-private-cloud
+- IPv4 CIDR -- 10.0.0.0/16
+- Host address range -- 10.0.0.1 - 10.0.255.254 (255 broadcasting)
+
+Step 2:
+-------
+Create 2 subnets (Public & Private)
+
+- Public-Subnet-A--10.0.0.0/24
+- Host address range -- 10.0.0.1 - 10.0.0.254
+
+- Private-Subnet-B--10.0.1.0/24
+- Host address range -- 10.0.1.1 - 10.0.1.254
+
+Step 3:
+-------
+Check the default route table -- you will see the above 2 subnets have not been explicitly associated with any route tables and are therefore associated with the main route table.
+
+Step 4:
+-------
+Create a IGW & connect with VPC
+
+Step 5:
+-------
+Create 2 route tables -- one with Public IGW , one private(only local)
+--public-route--add IGW in route table & associate the public subnet
+--private-route -- associate the private subnet
+
+Step 6:
+-------
+Create one EC2 instance in Public Subnet  (autoassign Public IP enable)
+Create one EC2 instance in Private Subnet (SSH & ICMP from Public Subnet)
+
+Note:
+-----
+ICMP--Internet Control Message Protocol--used to perform network diagnostics
+scp -i ~/Downloads/my-key.pem index.html ec2-user@54.201.123.45:/home/ec2-user/
+
+Step 7:
+------
+Ping the Private EC2 from public EC2
+Ping Google.com from public EC2
+
+Step 8:
+-------
+Send the Pem file via Winscp to public ec2.
+
+Use that key to enter in private EC2
+
+----------------------
+NAT GATEWAY IN DEPTH
+----------------------
+
+- To access the internet one publiuc IP address is needed, but we can use a prviate IP address in our private network.
+- The idea of NAT is to allow multiple devices to access the internet through single public address.
+- To achieve this, the translation of a private IP address to a public IP address is required.
+
+- NETWORK ADDRESS TRANSLATION: is a process in which one or more local IP address is translated into one or more Global 
+IP address and vice versa to provide internet access to local hosts.
+
+- Internet Gateway allows instace with public IP to access internet.
+- NAt Gateway allow instace with NO public IP to access internet.
+
+Steps:
+------
+- Create NAT GATEWAY and attach elastic IP with it.
+- Attach NAT gateway to public rotue table that have access to internet
+- 0.0.0.0/0 traffic throught nat gatway NAT gateway will be moved now.
+
+NOTE:
+- delete NAT Gateway
+- release Elastic IP
+- remove access fron Private rotue table
+
+----------------------
+VPC ENDPOINT IN DEPTH
+----------------------
+
+- A VPC endpoint enables connections between vitual private cloud (vpc) and supported services, without 
+requiring that you use a internet gateway, NAT device etc
+
+NOTE: services should be in same region.
+
+Steps:
+------
+- create role fro ec2 to have s3 access
+- attach role to ec2
+- create endpoint for vpc (private routetable should be selected)
+- aws s3 ls s3://s3-stock-prices-qh
+
