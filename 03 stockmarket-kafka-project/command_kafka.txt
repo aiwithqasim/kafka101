@@ -1,0 +1,100 @@
+
+# ==============================================================================
+# IMPORTANT — READ BEFORE RUNNING ANY COMMAND
+# ==============================================================================
+# 1. Always check which directory you are in before running a command.
+#    Run: pwd
+#    Most Kafka commands must be run from inside: ~/kafka_2.13-4.2.0
+#
+# 2. Replace placeholder values before running:
+#    {Put the Public IP of your EC2 Instance:9092} → e.g. 54.89.203.129:9092
+#
+# 3. EC2 public IP changes on every instance restart unless you have an Elastic IP.
+#    Always verify your current public IP in AWS Console before connecting.
+#
+# 4. Before creating topics or running producer/consumer, verify Kafka is running:
+#    Run: ps aux | grep kafka | grep -v grep
+#
+# 5. Port 9092 must be open in your EC2 Security Group for remote access.
+#    Check: AWS Console → EC2 → Security Groups → Inbound Rules → port 9092
+# ==============================================================================
+
+# Run this command, if necessary, to ensure your key is not publicly viewable.
+chmod 400 "kp-stockmarket-kafka-realtime-us-east1-qh.pem"
+
+# Connect to your instance using its Public DNS
+ssh -i ./secrets/kp-stockmarket-kafka-realtime-us-east1-qh.pem ec2-user@ec2-54-89-203-129.compute-1.amazonaws.com
+
+# Get Apache Kafka Compressed version
+wget https://downloads.apache.org/kafka/4.2.0/kafka_2.13-4.2.0.tgz
+
+# Validate and uncompress
+ls -ls | grep "kafka"
+tar -xvf kafka_2.13-4.2.0.tgz
+
+# Make sure we have Java pre-requisite installed
+# NOTE: Kafka 4.x requires Java 17 minimum (Java 8 will throw UnsupportedClassVersionError)
+java -version
+sudo yum install java-17-amazon-corretto -y
+java -version
+
+# Go to Kafka directory
+ls -la | grep "kafka"
+cd kafka_2.13-4.2.0
+
+# NOTE: Kafka 4.x removed Zookeeper completely. Use KRaft mode instead.
+# All steps below replace the old Zookeeper + Kafka two-process startup.
+
+# Start Kafka (KRaft mode — one-time storage format, then start):
+# ------------------------------
+# Run from inside kafka_2.13-4.2.0 directory
+
+# Step 1 — generate a unique cluster ID
+KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)"
+
+# Step 2 — format the storage directory (only needed once)
+# NOTE: --standalone is required for single-node KRaft setup in Kafka 4.x
+bin/kafka-storage.sh format --standalone -t $KAFKA_CLUSTER_ID -c config/server.properties
+
+# Step 3 — set heap size and start Kafka
+export KAFKA_HEAP_OPTS="-Xmx256M -Xms128M"
+bin/kafka-server-start.sh config/server.properties
+
+# NOTE: Kafka points to private IP by default.
+# Change advertised.listeners to your EC2 public IP:
+sudo nano config/server.properties
+
+# Find (Ctrl+W) and update: eg: 54.89.203.129
+advertised.listeners=PLAINTEXT://<your-ec2-public-ip>:9092
+# example:
+advertised.listeners=PLAINTEXT://54.89.203.129:9092
+# Save: Ctrl+X -> Y -> Enter
+# Then re-run Step 3
+
+# Validate the file overriste with IP 
+grep -E "^listeners|^advertised" config/server.properties
+
+# Create the topic:
+# ------------------------------
+# Open a new terminal session, SSH into EC2, then run:
+cd kafka_2.13-4.2.0
+bin/kafka-topics.sh --create --topic demo-testing2 --bootstrap-server {Put the Public IP of your EC2 Instance:9092} --replication-factor 1 --partitions 1
+
+example:
+bin/kafka-topics.sh --create --topic demo-testing2 --bootstrap-server 54.89.203.129:9092 --replication-factor 1 --partitions 1
+
+# Start Producer:
+# ------------------------------
+cd kafka_2.13-4.2.0
+bin/kafka-console-producer.sh --topic demo-testing2 --bootstrap-server {Put the Public IP of your EC2 Instance:9092}
+
+bin/kafka-console-producer.sh --topic demo-testing2 --bootstrap-server 54.89.203.129:9092
+
+# Start Consumer:
+# ------------------------------
+# Open a new terminal session, SSH into EC2, then run:
+cd kafka_2.13-4.2.0
+bin/kafka-console-consumer.sh --topic demo-testing2 --bootstrap-server {Put the Public IP of your EC2 Instance:9092}
+
+example: 
+bin/kafka-console-consumer.sh --topic demo-testing2 --bootstrap-server 54.89.203.129:9092

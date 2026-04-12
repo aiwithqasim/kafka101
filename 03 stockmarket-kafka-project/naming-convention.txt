@@ -1,0 +1,2 @@
+ec2-stockmarket-kafka-realtime-us-east1-qh
+kp-stockmarket-kafka-realtime-us-east1-qh
