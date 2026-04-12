@@ -1,0 +1,49 @@
+step 1:
+-------
+Create an IAM  with DynamoDB  and S3 access - my-vpc-ec2-s3-dyanmodb-access
+
+step 2:
+-------
+Launch EC2 instance in public subnet (EC2 A)
+Launch EC2 instance in private subnet (EC2 B)
+
+Step 3:
+-------
+Transfer .pem file in EC2 A via below commands scp -i path-to-pem-file path-to-file-need-to-be-copy path-to-ec2
+eg: scp -i ~/Downloads/my-key.pem index.html ec2-user@54.201.123.45:/home/ec2-user/
+
+Step 4:
+-------
+SSH to EC2 B via EC2 A
+
+setp 5:
+------
+Configure aws region via command aws configure
+
+step 6:
+-------
+Create Dynamodb table and validate it in private ec2 using aws dynamodb list-tables
+
+step 7:
+-------
+- sudo dnf install python3-pip -y
+- pip3 --version
+- pip3 install boto3
+
+step 8: 
+-------
+run code in ./vpc-dynamodb.py
+
+step 9:
+-------
+validate teh data in dynamodb
+
+step10:
+-------
+- delete NATgateway
+- delete elastic IPs
+- delete EC2 isntances
+- delete internet gateway
+- delete route tables
+- delete VPC
+- THINK TWICE IF YOU HAVE CREATED ANYTHING ELSE THAT IS NOT MENTIONED
