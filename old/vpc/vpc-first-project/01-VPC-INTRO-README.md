@@ -36,7 +36,7 @@
 
 ## End Goal
 
-![alt text](image-1.png)
+![alt text](./old/vpc/vpc-first-project/End-Goal.png)
 
 ## Prerequisites
 
