@@ -19,7 +19,7 @@
 
 ### What You're Building
 
-![alt text](./01%20vpc-intro.drawio.png)
+![alt text](./img/01-vpc-intro.drawio.png)
 
 ### Key Components
 
@@ -36,7 +36,7 @@
 
 ## End Goal
 
-![alt text](./old/vpc/vpc-first-project/End-Goal.png)
+![alt text](./img/01-end-goal.png)
 
 ## Prerequisites
 
