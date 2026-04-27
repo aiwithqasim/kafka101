@@ -12,7 +12,7 @@ This guide teaches you how to build a more sophisticated VPC with both **public 
 
 ## End Goal
 
-![alt text](image.png)
+![alt text](./old/vpc/vpc-second-project/End-Goal.png)
 
 ## What You're Building
 
