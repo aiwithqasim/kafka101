@@ -1,7 +1,5 @@
 # AWS VPC Fundamentals: Complete Beginner's Guide
-**By: Senior Data Engineer | 5+ Years AWS Experience**
 
----
 
 ## Table of Contents
 1. [Architecture Overview](#architecture-overview)
@@ -19,7 +17,7 @@
 
 ### What You're Building
 
-![alt text](./img/01-vpc-intro.drawio.png)
+![alt text](./img/01%20vpc-intro.drawio.png)
 
 ### Key Components
 
@@ -36,15 +34,15 @@
 
 ## End Goal
 
-![alt text](./img/01-end-goal.png)
+![alt text](./img/End-Goal.png)
 
 ## Prerequisites
 
 ### AWS Account Requirements
-- ✅ AWS Account created (free tier eligible)
-- ✅ Proper IAM permissions (EC2, VPC, IAM)
-- ✅ AWS CLI installed (optional but recommended)
-- ✅ SSH client (Mac/Linux: built-in | Windows: PuTTY or Git Bash)
+- AWS Account created (free tier eligible)
+- Proper IAM permissions (EC2, VPC, IAM)
+- AWS CLI installed (optional but recommended)
+- SSH client (Mac/Linux: built-in | Windows: PuTTY or Git Bash)
 
 ### Local Setup
 ```bash
@@ -82,11 +80,11 @@ aws configure
 | **TOTAL** | | | **~$17/month** |
 
 ### How to Keep Costs LOW:
-1. ✅ Use **t2.micro** (free tier eligible)
-2. ✅ **Stop instances** when not using (not terminate!)
-3. ✅ Don't create **Elastic IPs** unnecessarily
-4. ✅ **Delete resources** when done (follow cleanup steps)
-5. ✅ Use **AWS Cost Explorer** to monitor
+1. Use **t2.micro** (free tier eligible)
+2. **Stop instances** when not using (not terminate!)
+3. Don't create **Elastic IPs** unnecessarily
+4. **Delete resources** when done (follow cleanup steps)
+5. Use **AWS Cost Explorer** to monitor
 
 ---
 
@@ -117,7 +115,7 @@ A VPC is your private network in AWS. It's completely isolated and you control a
   - And so on...
 
 5. Click **"Create VPC"**
-6. ✅ Your VPC is created!
+6. Your VPC is created!
 
 **Verify:**
 - Go to VPC Dashboard → VPCs
@@ -143,7 +141,7 @@ The IGW is the "gate" between your VPC and the internet. Without it, your VPC is
 6. Click **"Actions"** → **"Attach to VPC"**
 7. Select **"my-first-vpc"**
 8. Click **"Attach Internet Gateway"**
-9. ✅ IGW is now attached to your VPC!
+9. IGW is now attached to your VPC!
 
 **Verify:**
 - The IGW state should change to **"Attached"**
@@ -160,7 +158,7 @@ Subnets are subdivisions of your VPC, each in a specific Availability Zone (AZ).
 Scenario: AZ 1a goes down
 - Your Subnet 1a instances go down
 - But Subnet 1b in AZ 1b keeps running
-- Your application stays online! 🎯
+- Your application stays online! 
 ```
 
 **Create Subnet 1 (in us-east-1a):**
@@ -175,7 +173,7 @@ Scenario: AZ 1a goes down
    IPv4 CIDR Block:      10.0.1.0/24
    ```
 4. Click **"Create Subnet"**
-5. ✅ Subnet 1 created!
+5. Subnet 1 created!
 
 **Create Subnet 2 (in us-east-1b):**
 
@@ -188,7 +186,7 @@ Scenario: AZ 1a goes down
    IPv4 CIDR Block:      10.0.2.0/24
    ```
 3. Click **"Create Subnet"**
-4. ✅ Subnet 2 created!
+4. Subnet 2 created!
 
 **IP Distribution:**
 ```
@@ -247,10 +245,10 @@ We need to add a route to the Internet Gateway so traffic can reach the internet
 11. Click **"Subnet Associations"** tab
 12. Click **"Edit Subnet Associations"**
 13. Select **both** subnets:
-    - ✅ public-subnet-1a
-    - ✅ public-subnet-1b
+    - public-subnet-1a
+    - public-subnet-1b
 14. Click **"Save Associations"**
-15. ✅ Both subnets now have public internet access!
+15. Both subnets now have public internet access!
 
 **Verify:**
 - Route table shows both routes active
@@ -310,7 +308,7 @@ A security group is a firewall. It controls which traffic is allowed IN and OUT 
    (You can leave this as default)
 
 6. Click **"Create Security Group"**
-7. ✅ Security group is created!
+7. Security group is created!
 
 **Best Practice - Restrict SSH Access:**
 For security, restrict SSH to your IP:
@@ -415,16 +413,16 @@ Get-Item "$env:USERPROFILE\.ssh\my-first-keypair.pem"
 | Lose the file | Backup to secure location |
 
 **What if you lose the key?**
-- ❌ You can't recover it
-- ❌ You can't SSH into that instance
-- ✅ You'd have to terminate and create a new instance with a new key
+- You can't recover it
+- You can't SSH into that instance
+- You'd have to terminate and create a new instance with a new key
 
 ---
 
 ### **Important: Using Same Key Pair for Multiple Instances**
 
 **For This Guide:**
-- ✅ **Both EC2 instances (Instance 1 & Instance 2) use the SAME key pair: `my-first-keypair`**
+- **Both EC2 instances (Instance 1 & Instance 2) use the SAME key pair: `my-first-keypair`**
 - This is simpler for beginners
 - You only need ONE key file to manage
 
@@ -462,12 +460,12 @@ If you want to use different key pairs for each instance (more secure in product
    ```
 
 **Pros of Different Keys:**
-- ✅ If one key is compromised, only that instance is at risk
-- ✅ Better security for production
+- If one key is compromised, only that instance is at risk
+- Better security for production
 
 **Cons of Different Keys:**
-- ❌ More keys to manage
-- ❌ More complicated for beginners
+- More keys to manage
+- More complicated for beginners
 
 **Recommendation:** Use the **SAME key pair** for this learning exercise. In production, use different keys per instance.
 
@@ -524,7 +522,7 @@ Root Volume Size: 8 GB
 - Check all settings
 - Click **"Launch Instances"**
 - Wait for instance to reach **"Running"** state (1-2 minutes)
-- ✅ Instance 1 is running!
+- Instance 1 is running!
 
 **Launch Instance 2 (in us-east-1b):**
 
@@ -584,7 +582,7 @@ ssh -i ~/.ssh/my-first-keypair.pem ec2-user@54.208.123.45
 [ec2-user@ip-10-0-1-x ~]$
 ```
 
-You're now inside your EC2 instance! 🎉
+You're now inside your EC2 instance!
 
 ---
 
@@ -708,7 +706,7 @@ ssh -i ~/.ssh/my-first-keypair.pem ec2-user@YOUR-IP
 
 ## Clean Up & Cost Management
 
-### ⚠️ CRITICAL: Delete Resources When Done!
+### CRITICAL: Delete Resources When Done!
 
 **Why?** Unused resources = unnecessary AWS bills!
 
@@ -716,7 +714,7 @@ ssh -i ~/.ssh/my-first-keypair.pem ec2-user@YOUR-IP
 
 #### 1. Terminate EC2 Instances
 
-**⚠️ WARNING: This CANNOT be undone!**
+**WARNING: This CANNOT be undone!**
 
 1. Go to **EC2 Dashboard** → **"Instances"**
 2. Select both instances (checkboxes)
@@ -833,7 +831,7 @@ rm ~/.ssh/my-first-keypair.pem
 1. EC2 Dashboard → Instances
 2. Select instances
 3. Instance State → Stop (NOT Terminate)
-4. ✅ Instances stop running
+4. Instances stop running
 5. You'll only pay for storage (~$0.096/GB/month), not compute
 6. Can restart later without recreating everything
 ```
@@ -842,8 +840,8 @@ rm ~/.ssh/my-first-keypair.pem
 
 | Action | Cost | Reversible | When to Use |
 |--------|------|-----------|------------|
-| **Stop** | Storage only (~$1/month) | ✅ Yes (restart anytime) | Testing/Learning |
-| **Terminate** | None | ❌ No (delete forever) | Done completely |
+| **Stop** | Storage only (~$1/month) | Yes (restart anytime) | Testing/Learning |
+| **Terminate** | None | No (delete forever) | Done completely |
 
 ---
 
@@ -852,14 +850,14 @@ rm ~/.ssh/my-first-keypair.pem
 ### 1. Security
 
 ```
-✅ DO:
+DO:
 - Restrict SSH to your IP (not 0.0.0.0/0)
 - Use strong key pairs
 - Keep private keys secure (never in GitHub)
 - Use security groups properly
 - Regularly audit IAM permissions
 
-❌ DON'T:
+DON'T:
 - Use default security groups in production
 - Expose SSH to the world (0.0.0.0/0)
 - Share key pairs
@@ -870,14 +868,14 @@ rm ~/.ssh/my-first-keypair.pem
 ### 2. Networking
 
 ```
-✅ DO:
+DO:
 - Use multiple AZs for redundancy
 - Implement proper subnet design
 - Use VPC Flow Logs for monitoring
 - Document your CIDR blocks
 - Test connectivity between AZs
 
-❌ DON'T:
+DON'T:
 - Use overlapping CIDR blocks
 - Create too many subnets (plan ahead)
 - Forget to configure route tables
@@ -888,7 +886,7 @@ rm ~/.ssh/my-first-keypair.pem
 ### 3. Cost Management
 
 ```
-✅ DO:
+DO:
 - Use free tier instances (t2.micro)
 - Monitor spending with AWS Cost Explorer
 - Set up billing alerts
@@ -896,7 +894,7 @@ rm ~/.ssh/my-first-keypair.pem
 - Stop instances when not needed
 - Use reserved instances for long-term
 
-❌ DON'T:
+DON'T:
 - Leave instances running 24/7 in dev
 - Create multiple IGWs (only need 1)
 - Use large instance types for learning
@@ -909,15 +907,15 @@ rm ~/.ssh/my-first-keypair.pem
 For production, add:
 
 ```
-✅ Multi-AZ deployment (you've done this!)
-✅ Load Balancers (distribute traffic)
-✅ Auto Scaling (handle traffic spikes)
-✅ RDS in private subnet (database security)
-✅ CloudWatch monitoring (track health)
-✅ Backup and disaster recovery plan
-✅ SSL/TLS certificates
-✅ VPC Flow Logs
-✅ WAF (Web Application Firewall)
+Multi-AZ deployment (you've done this!)
+Load Balancers (distribute traffic)
+Auto Scaling (handle traffic spikes)
+RDS in private subnet (database security)
+CloudWatch monitoring (track health)
+Backup and disaster recovery plan
+SSL/TLS certificates
+VPC Flow Logs
+WAF (Web Application Firewall)
 ```
 
 ---
@@ -997,18 +995,10 @@ curl https://checkip.amazonaws.com/
 ## Summary
 
 **You've successfully:**
-- ✅ Created an isolated VPC with proper networking
-- ✅ Set up internet connectivity with IGW
-- ✅ Implemented multi-AZ redundancy
-- ✅ Configured security groups
-- ✅ Launched and accessed EC2 instances
-- ✅ Tested network connectivity
-- ✅ Learned proper cleanup procedures
-
-**Congratulations!** You now understand AWS VPC fundamentals! 🚀
-
----
-
-*Last Updated: April 26, 2026*  
-*Created by: Senior Data Engineer (5+ years AWS experience)*  
-*Difficulty Level: Beginner | Estimated Time: 45 minutes*
+- Created an isolated VPC with proper networking
+- Set up internet connectivity with IGW
+- Implemented multi-AZ redundancy
+- Configured security groups
+- Launched and accessed EC2 instances
+- Tested network connectivity
+- Learned proper cleanup procedures

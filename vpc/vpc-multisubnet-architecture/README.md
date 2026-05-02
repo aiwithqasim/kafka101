@@ -7,12 +7,12 @@ This guide teaches you how to build a more sophisticated VPC with both **public 
 
 ## Architecture Diagram
 
-![alt text](./02%20vpc-intermediate.drawio.png)
+![alt text](./img/02%20vpc-intermediate.drawio.png)
 
 
 ## End Goal
 
-![alt text](./old/vpc/vpc-second-project/End-Goal.png)
+![alt text](./img/End-Goal.png)
 
 ## What You're Building
 
@@ -22,11 +22,11 @@ Internet Users
 Internet Gateway
        ↓
    VPC (10.0.0.0/16)
-   ├── Public Subnet (10.0.0.0/24)
+   ├── Public Subnet (10.0.1.0/24)
    │   ├── EC2 Instance (Web Server)
    │   └── Route Table: 0.0.0.0/0 → IGW
    │
-   └── Private Subnet (10.0.1.0/24)
+   └── Private Subnet (10.0.2.0/24)
        ├── EC2 Instance (Database Server)
        └── Route Table: Only local traffic
 ```
@@ -72,7 +72,7 @@ If you already have "my-first-vpc" from the intro guide, you can use that. Other
    IPv4 CIDR Block: 10.0.0.0/16
    ```
 4. Click "Create VPC"
-5. ✅ VPC Created!
+5. VPC Created!
 
 ---
 
@@ -102,7 +102,7 @@ A public subnet is one that has a route to the Internet Gateway.
 ```
 
 4. Click "Create Subnet"
-5. ✅ Public Subnet Created!
+5. Public Subnet Created!
 
 ---
 
@@ -127,7 +127,7 @@ A private subnet has NO route to the Internet Gateway.
 - This provides redundancy and high availability
 
 4. Click "Create Subnet"
-5. ✅ Private Subnet Created!
+5. Private Subnet Created!
 
 ---
 
@@ -144,7 +144,7 @@ A private subnet has NO route to the Internet Gateway.
 6. Click "Attach to VPC"
 7. Select "intermediate-vpc"
 8. Click "Attach Internet Gateway"
-9. ✅ Internet Gateway Created and Attached!
+9. Internet Gateway Created and Attached!
 
 ---
 
@@ -191,7 +191,7 @@ You need **two route tables**:
 
 **Important**: Do NOT add any routes to this private route table. It should only have local routes (10.0.0.0/16).
 
-10. ✅ Private Route Table Created and Associated!
+10. Private Route Table Created and Associated!
 
 ---
 
@@ -233,10 +233,11 @@ You need **two security groups**:
      Port:       22
      Source:     0.0.0.0/0 (or restrict to your IP)
      ```
-     you can restrict to your IP by selecting My IP in source
+     you can restrict to your IP by selecting My IP in source, but keep this thing in mind that My IP can be change when you restart your router or
+     your connection resets so if you run the ssh and it is showing connection time out you go to inbound rules click on My Ip in ssh rule it will automatically sets the current Ip and then run it.
 
 5. Click "Create Security Group"
-6. ✅ Web Server Security Group Created!
+6. Web Server Security Group Created!
 
 **Create Database Security Group:**
 
@@ -266,14 +267,14 @@ You need **two security groups**:
      Type:       SSH
      Protocol:   TCP
      Port:       22
-     Source:     web-sg ip address (10.0.1.143/32)
+     Source:     web-sg private ip address (10.0.1.143/32)
      ```
    - **ICMP** (for administration from web server):
       ```
       Type:       ALL ICMP-IPv4
       Protocol:   ICMP
       Port:       ALL
-      Source:     web-sg ip address (10.0.1.143/32)
+      Source:     web-sg private ip address (10.0.1.143/32)
       ```
    
    **Why use web-sg for SSH?**
@@ -282,7 +283,7 @@ You need **two security groups**:
    - Secure bastion host pattern: Web server acts as gateway to database
 
 4. Click "Create Security Group"
-5. ✅ Database Security Group Created!
+5. Database Security Group Created!
 
 ---
 
@@ -323,7 +324,7 @@ Volume Size: 8 GB
 5. Review settings
 6. Click "Launch Instances"
 7. Wait for instance to reach "Running" state
-8. ✅ Web Server Launched!
+8. Web Server Launched!
 
 **Get the Public IP:**
 - Go to Instances
@@ -368,7 +369,7 @@ Volume Size: 8 GB
 3. Review settings
 4. Click "Launch Instances"
 5. Wait for instance to reach "Running" state
-6. ✅ Database Server Launched!
+6. Database Server Launched!
 
 ---
 
@@ -418,7 +419,7 @@ chmod 400 "kp-database-server.pem"
 ssh -i ~/kp-database-server.pem ec2-user@10.0.2.47
 ```
 
-You can now reach it! ✅
+You can now reach it! 
 
 **Important: Key Separation Benefits**
 - 🔒 Web server has its own key (kp-web-server.pem) - for your local access
@@ -452,7 +453,7 @@ PING google.com (142.251.179.139) 56(84) bytes of data.
 5 packets transmitted, 0 received, 100% packet loss, time 4134ms
 ```
 
-**What This Means:** ✅
+**What This Means:** 
 - ✅ DNS works (google.com → 142.251.179.139 resolved)
 - ❌ Actual internet traffic is blocked (100% packet loss)
 - ✅ This is secure and expected!
@@ -466,10 +467,11 @@ The private subnet's route table only has a local route (10.0.0.0/16 → local).
 
 ```bash
 ctrl + d
+now you are in public subnet(ec2)
 ping <enter private subnet(ec2) ip>  # Web server in the VPC
 ```
 
-This should work! ✅
+This should work!
 
 ## Communication Flow Summary
 
@@ -488,17 +490,17 @@ This should work! ✅
 
 ## Security Benefits
 
-✅ **Web Server is Publicly Accessible:**
+ **Web Server is Publicly Accessible:**
 - Users can reach it from the internet
 - It serves web pages and handles requests
 
-✅ **Database Server is Completely Hidden:**
+ **Database Server is Completely Hidden:**
 - No public IP address
 - Cannot reach the internet
 - Only accessible from web servers via private network
 - Even if web server is hacked, database is in a separate security group
 
-✅ **Defense in Depth:**
+ **Defense in Depth:**
 - Multiple layers of security
 - Network isolation (public vs private subnets)
 - Security group rules (only web can talk to database)
@@ -510,11 +512,11 @@ This should work! ✅
 
 Run through these tests to verify everything works:
 
-- [ ] Can you SSH into the web server? ✅
-- [ ] Can you ping google.com from web server? ✅
-- [ ] Can you ping database server's private IP from web server? ✅
-- [ ] Can you NOT ping google.com from database server? ✅
-- [ ] Can you SSH from web server into database server? ✅
+- [ ] Can you SSH into the web server? 
+- [ ] Can you ping google.com from web server? 
+- [ ] Can you ping database server's private IP from web server? 
+- [ ] Can you NOT ping google.com from database server? 
+- [ ] Can you SSH from web server into database server? 
 
 ---
 
@@ -579,7 +581,7 @@ When you're finished, **delete all resources to avoid unnecessary charges**. Fol
 6. Click "Instance State" → "Terminate Instance"
 7. Confirm
 8. Wait for both to reach "Terminated" state
-9. ✅ Instances Terminated!
+9. Instances Terminated!
 
 **Critical:** Must terminate instances BEFORE deleting VPC!
 
@@ -593,7 +595,7 @@ When you're finished, **delete all resources to avoid unnecessary charges**. Fol
 4. Select your VPC and confirm
 5. Select the IGW again
 6. Click "Actions" → "Delete Internet Gateway"
-7. ✅ IGW Deleted!
+7. IGW Deleted!
 
 ---
 
@@ -606,7 +608,7 @@ When you're finished, **delete all resources to avoid unnecessary charges**. Fol
 5. Find "private-route-table"
 6. Click "Actions" → "Delete Route Table"
 7. Confirm
-8. ✅ Route Tables Deleted!
+8. Route Tables Deleted!
 
 ---
 
@@ -619,7 +621,7 @@ When you're finished, **delete all resources to avoid unnecessary charges**. Fol
 5. Select "private-subnet-b"
 6. Click "Actions" → "Delete Subnet"
 7. Confirm
-8. ✅ Subnets Deleted!
+8. Subnets Deleted!
 
 ---
 
@@ -629,7 +631,7 @@ When you're finished, **delete all resources to avoid unnecessary charges**. Fol
 2. Select "intermediate-vpc"
 3. Click "Actions" → "Delete VPC"
 4. Confirm (automatically deletes any remaining subnets)
-5. ✅ VPC Deleted!
+5. VPC Deleted!
 
 ---
 
@@ -642,7 +644,7 @@ When you're finished, **delete all resources to avoid unnecessary charges**. Fol
 5. Select "db-sg"
 6. Click "Actions" → "Delete Security Group"
 7. Confirm
-8. ✅ Security Groups Deleted!
+8. Security Groups Deleted!
 
 **Note:** Default security group cannot be deleted.
 
@@ -669,13 +671,13 @@ If you completed this guide within 1 month:
 ```
 AWS Service              Cost
 ─────────────────────────────
-VPC & Subnets            FREE ✅
-Route Tables             FREE ✅
-Internet Gateway         FREE ✅
-Security Groups          FREE ✅
-2× EC2 t2.micro          FREE ✅ (free tier, 12 months)
+VPC & Subnets            FREE 
+Route Tables             FREE 
+Internet Gateway         FREE 
+Security Groups          FREE 
+2× EC2 t2.micro          FREE  (free tier, 12 months)
 ─────────────────────────────
-Total Cost               $0.00 ✅
+Total Cost               $0.00 
 ```
 
 No charges if within free tier limits!
@@ -703,7 +705,7 @@ Restart: Must launch new instance
 Data: Lost forever
 ```
 
-💡 **Strategy:**
+**Strategy:**
 - Taking a 1-week break? STOP instances
 - Done learning? TERMINATE instances
 
@@ -721,7 +723,7 @@ To confirm everything is deleted:
 6. Go to EC2 → Instances - should not see your instances
 7. Go to EC2 → Security Groups - should not see your SGs
 
-✅ If all above show nothing, you've successfully cleaned up!
+If all above show nothing, you've successfully cleaned up!
 
 ---
 
@@ -743,6 +745,4 @@ To confirm everything is deleted:
 - Terminate instances first
 - Then delete security group
 
----
 
-**Great work! You've built a production-like VPC architecture!** 🎉
