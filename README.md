@@ -18,10 +18,10 @@ A structured, progressive learning resource for Apache Kafka deployment, from Do
 
 ## Workspace Overview
 
-This repository contains **5 main project folders** progressing from beginner to advanced levels, plus an **old/** folder with archived and legacy content.
+This repository contains **5 main project folders** progressing from beginner to advanced levels.
 
 **Key Highlights:**
-- ✅ **3 fully developed sections** (01, 02, 03)
+- ✅ **3 fully developed sections** (01, 02, 03, 04 vpc, 05 msk-with-vpc)
 - 📦 **Docker & EC2 deployment guides**
 - 💼 **Real-world stock market data pipeline project**
 - 📚 **Educational diagrams and documentation**
@@ -175,41 +175,20 @@ Stock Data Source → Kafka Producer → Kafka Broker → Kafka Consumer → AWS
 
 ---
 
-### 📁 04: Kafka Snowflake Integration
-
-**Status:** 🔴 Empty (Placeholder for future use)
-
-**Intended Purpose:** Kafka-to-Snowflake direct ingestion examples
-
----
-
-### 📁 05: MSK and MSK with Snowflake
-
-**Status:** 🔴 Empty (Placeholder for future use)
-
-**Intended Purpose:** AWS Managed Streaming for Kafka (MSK) examples with Snowflake integration
-
----
-
-### 📁 old/: Archived & Legacy Content
-
-**Status:** Deprecated but historically valuable
+### 📁 04: VPC
 
 **Contents:**
-- **01 kafka-hello-world.txt** - Windows-based Zookeeper/Kafka local setup
-- **02 kafka-snowflake-integration.txt** - Kafka Connect + Snowflake setup guide
-- **03 getting started with msk.txt** - AWS MSK VPC configuration
-- **04 aws-msk-connector-for-snowflake.txt** - Partial connector documentation
-- **hello-kafka.py** - Simple Python producer (sends 1000 test messages)
-- **kafkakafka_logsserver_logs/** - Historical Kafka broker partition logs
-- **kafkakafka_logszookeeper/** - Historical Zookeeper state
-- **venv/** - Archived Python virtual environment
-- **vpc-msk-project.drawio.png** - VPC architecture diagram
+- 01 vpc-getting-started/
+- 02 vpc-multisubnet-architecture/
+- 03 vpc-multisubnet-archtecture-with-nat-gateway/
+- 04 vpc-multisubnet-with-endpoint/
+- 05 vpc-multisubnet-architecture-with-multiple-endpoint/ (includes data-vpc-dynamodb.json and vpc-dynamodb.py)
 
-**Legacy Notes:**
-- Folder contains Kafka 2.7.0 artifacts (now superseded by Kafka 4.x)
-- Zookeeper mode (no longer default)
-- Java 8 compatibility (now requires Java 17)
+### 📁 05: MSK with VPC
+
+**Contents:**
+- README.md
+- data/kafka_producer.py
 
 ---
 
@@ -314,13 +293,12 @@ Stream Processing:    Kafka Topic → Processor → Multiple Brokers → Analyti
 5. Validate in AWS console
 
 ### For Snowflake Integration
-1. Reference `old/02 kafka-snowflake-integration.txt`
-2. Install Kafka Connect with Snowflake connector
-3. Generate RSA key pairs for authentication
-4. Configure connector with Snowflake credentials
+1. Install Kafka Connect with Snowflake connector
+2. Generate RSA key pairs for authentication
+3. Configure connector with Snowflake credentials
 
 ### For AWS MSK
-1. Reference `old/03 getting started with msk.txt`
+1. Reference `05 msk-with-vpc/README.md`
 2. Create VPC with appropriate subnets
 3. Launch MSK cluster with security groups
 4. Create EC2 client in same VPC
@@ -374,14 +352,13 @@ Before starting any setup:
 
 ```
 kafka101/
-├── README.md                                    ← You are here
+├── README.md
 ├── 01 getting started with kafka with docker/
 │   ├── README.md
 │   ├── docker-compose.yml
 │   ├── commands.sh
 │   ├── Producer.ipynb
-│   ├── Consumer.ipynb
-│   └── images/
+│   └── Consumer.ipynb
 ├── 02 kafka manually setup kafka on ec2/
 │   └── README.md
 ├── 03 stockmarket-kafka-project/
@@ -390,21 +367,19 @@ kafka101/
 │   ├── command_kafka.txt
 │   ├── naming-convention.txt
 │   ├── KafkaProducer.ipynb
-│   ├── KafkaConsumer.ipynb
-│   ├── data/
-│   ├── secrets/
-│   └── images/
-├── 04 kafka snowflake integration/
-├── 05 msk and msk with snowflake/
-└── old/
-    ├── 01 kafka-hello-world.txt
-    ├── 02 kafka-snowflake-integration.txt
-    ├── 03 getting started with msk.txt
-    ├── 04 aws-msk-connector-for-snowflake.txt
-    ├── hello-kafka.py
-    ├── kafkakafka_logsserver_logs/
-    ├── kafkakafka_logszookeeper/
-    └── venv/
+│   └── KafkaConsumer.ipynb
+├── 04 vpc/
+│   ├── 01 vpc-getting-started/
+│   ├── 02 vpc-multisubnet-architecture/
+│   ├── 03 vpc-multisubnet-archtecture-with-nat-gateway/
+│   ├── 04 vpc-multisubnet-with-endpoint/
+│   └── 05 vpc-multisubnet-architecture-with-multiple-endpoint/
+│       ├── data-vpc-dynamodb.json
+│       └── vpc-dynamodb.py
+└── 05 msk-with-vpc/
+    ├── README.md
+    └── data/
+        └── kafka_producer.py
 ```
 
 ---
